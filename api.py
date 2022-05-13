@@ -17,7 +17,7 @@ app.secret_key = 'secret'
 app.register_blueprint(blueprints.test.blueprint)
 
 conn = mysql.connector.connect(
-    server=os.environ['DB_SERVER'],
+    host=os.environ['DB_SERVER'],
     user=os.environ['DB_USER'],
     password=os.environ['DB_PASSWORD'],
     database=os.environ['DB_DATABASE']
@@ -37,7 +37,11 @@ def flipacoin():
 
 @app.route('/registername', methods=[ 'POST' ])
 def registername():
-    
+    data=request.get_json()
+    query="INSERT INTO usuario(name) VALUES(%s)"
+    values=(data["name"],)
+    cursor.execute(query,values)
+    return 'Inserido com sucesso'    
 
 if __name__ == '__main__':
 
